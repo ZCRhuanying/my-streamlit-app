@@ -1,5 +1,4 @@
 import streamlit as st
-import webbrowser
 
 # 设置页面配置
 st.set_page_config(
@@ -41,11 +40,7 @@ website_data = {
     ]
 }
 
-# 自定义打开链接的函数
-def open_link(url):
-    webbrowser.open_new_tab(url)
-
-# 显示各个分类的网站
+# 显示各个分类的网站（使用markdown链接，支持云端打开）
 for category, websites in website_data.items():
     st.subheader(f"📌 {category}")
     
@@ -53,13 +48,11 @@ for category, websites in website_data.items():
     cols = st.columns(3)
     for i, site in enumerate(websites):
         with cols[i % 3]:
-            if st.button(f"🔍 {site['name']}", key=site['name']):
-                open_link(site['url'])
+            # 关键修改：用markdown生成可点击链接，target="_blank"确保在新标签页打开
+            st.markdown(f"[🔍 **{site['name']}**]({site['url']})", unsafe_allow_html=True)
             st.caption(site['desc'])
     
     st.write("---")
 
 # 底部信息
-st.caption("提示：点击网站名称即可打开对应链接")
-
-
+st.caption("提示：点击网站名称即可在新标签页打开对应链接")
